@@ -1,0 +1,24 @@
+
+/**
+ * When an item is added to the cart, remove other products and redirect to checkout.
+ */
+
+function custom_maybe_empty_cart( $valid, $product_id, $quantity ) {
+    if ( ! empty( WC()->cart->get_cart() ) && $valid ) {
+        WC()->cart->empty_cart();
+        wc_add_notice( 'Only allowed 1 item in cart.', 'error' );
+    }
+    return $valid;
+}
+add_filter( 'woocommerce_add_to_cart_validation', 'custom_maybe_empty_cart', 10, 3 );
+
+function custom_redirect_to_checkout() {
+    if ( is_cart() || is_checkout() ) return;
+    
+    global $woocommerce;
+    $checkout_url = wc_get_checkout_url();
+    $woocommerce->cart->calculate_totals();
+    wp_safe_redirect( $checkout_url );
+    exit;
+}
+add_action( 'woocommerce_add_to_cart', 'custom_redirect_to_checkout' );
