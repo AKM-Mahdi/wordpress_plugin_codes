@@ -8,31 +8,36 @@
  * Requires PHP:      7.2
  * Author:            A K M Mahdi
  * Author URI:        https://www.akmmahdi.com
- * License:           GPL v2 or later
  * Text Domain:       wp-books
  */
 
-// security checks 
-if(!defined(ABSPATH)) exit();
+if(!defined('ABSPATH')) exit;
 
 class Wp_Books {
     function __construct(){
-        add_action("init", [$this, "init_all"]);
+        add_action("init", [$this, "init"]);
 
         // Activation / Deactivation hooks must be registered here
-        register_activation_hook(__FILE__, [$this, 'activate']);   
-        register_deactivation_hook(__FILE__, [$this, 'deactivate']); 
-        
-    }    
-
-    public function init_all(){
-       echo "<p>The plugin is running</p>";
+        register_activation_hook(__FILE__, [$this, 'activate']);
+        register_deactivation_hook(__FILE__, [$this, 'deactivate']);
     }
 
+     public static function activate(){
+        // require_once plugin_dir_path(__FILE__) . 'includes/db/wp-book-db.php';
+        // Wp_Books_DB::create_db();
+    }
+
+     function deactivate(){
+        
+    }
+
+    public function init(){
+       
+    }
+
+
+   
 }
 
+
 new Wp_Books();
-
-
-
-
